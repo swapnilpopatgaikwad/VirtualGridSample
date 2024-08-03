@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VirtualGridSample.View.VirtualGridPage"
+             xmlns:view="clr-namespace:VirtualGridSample.VirtualControl"
+             xmlns:model="clr-namespace:VirtualGridSample.Model"
+             xmlns:viewModel="clr-namespace:VirtualGridSample.ViewModel"
+             x:DataType="viewModel:VirtualGridViewModel"
+             Title="VirtualGridPage">
+
+    <ScrollView Orientation="Both"
+                HorizontalScrollBarVisibility="Always"
+                VerticalScrollBarVisibility="Always">
+        <view:VirtualGrid PropertyEnum="{x:Type model:PTypePropertyType}"
+                          GridItemSource="{Binding DataItems}"
+                          Columns="{Binding Columns}">
+
+        </view:VirtualGrid>
+        
+    </ScrollView>
+
+</ContentPage>

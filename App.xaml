@@ -1,0 +1,40 @@
+﻿<?xml version = "1.0" encoding = "UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:VirtualGridSample"
+             x:Class="VirtualGridSample.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <DataTemplate x:Key="Logo1Template">
+                <StackLayout>
+                    <Label Text="demo1" />
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="Logo2Template">
+                <StackLayout>
+                    <Label Text="demo2" />
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="Logo3Template">
+                <StackLayout>
+                    <Label Text="demo3" />
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="Logo4Template">
+                <StackLayout>
+                    <Label Text="demo4" />
+                </StackLayout>
+            </DataTemplate>
+            <DataTemplate x:Key="Logo5Template">
+                <StackLayout>
+                    <Label Text="demo5" />
+                </StackLayout>
+            </DataTemplate>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
