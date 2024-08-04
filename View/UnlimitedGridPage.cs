@@ -1,4 +1,6 @@
-﻿namespace VirtualGridSample.View
+﻿using Microsoft.Maui.Controls.PlatformConfiguration;
+
+namespace VirtualGridSample.View
 {
     internal class UnlimitedGridPage : ContentPage
     {
@@ -101,7 +103,16 @@
                     FontAttributes = FontAttributes.Bold,
                     Padding = new Thickness(5)
                 };
-                _headerGrid.Add(headerLabel, col, 0);
+                var frame = new Frame()
+                {
+                    CornerRadius = 0,
+                    BorderColor = Colors.Black,
+                    Padding = 0,
+                    Margin = 0,
+                    BackgroundColor = Colors.LightGray,
+                    Content = headerLabel,
+                };
+                _headerGrid.Add(frame, col, 0);
             }
         }
 
@@ -128,15 +139,24 @@
                             Text = rows[row][col],
                             Padding = new Thickness(5)
                         };
-                        //var stk = new StackLayout()
-                        //{
-                        //    cellLabel,
-                        //    new Entry
-                        //    {
-                        //        BackgroundColor= Colors.Red,
-                        //    }
-                        //};
-                        _contentGrid.Add(cellLabel, col, row);
+                        var stk = new StackLayout()
+                        {
+                            cellLabel,
+                            new Entry
+                            {
+                                BackgroundColor= Colors.Red,
+                            }
+                        };
+
+                        var frame = new Frame()
+                        {
+                            CornerRadius = 0,
+                            BorderColor = Colors.Black,
+                            Padding = 0,
+                            Margin = 0,
+                            Content = stk,
+                        };
+                        _contentGrid.Add(frame, col, row);
                     }
                 }
             }
