@@ -7,14 +7,11 @@ namespace VirtualGridSample.VirtualControl
 {
     public class DataAdapter : IDisposable
     {
-        public class AdapterItem(object data)
-        {
-            public object Data { get; } = data;
-        }
         protected VirtualGrid Control { get; set; }
-        protected List<AdapterItem> InternalItems { get; set; } = [];
+        protected List<object> InternalItems { get; set; } = [];
+        protected List<DataGridColumn> InternalColumnItems { get; set; } = [];
 
-        public IReadOnlyList<AdapterItem> Items => InternalItems;
+        public IReadOnlyList<object> Items => InternalItems;
 
         public virtual int ItemsCount => InternalItems?.Count ?? 0;
 
@@ -45,6 +42,14 @@ namespace VirtualGridSample.VirtualControl
             OnCollectionChangedReset(itemsSource);
         }
 
+        public void BuildColumns()
+        {
+            if (Control.Columns.Count > 0)
+            {
+                InternalColumnItems= [.. Control.Columns];
+            }
+        }
+
         public void ReloadData()
         {
             var itemsSource = Control?.GridItemSource;
@@ -56,7 +61,7 @@ namespace VirtualGridSample.VirtualControl
 
         protected virtual void OnCollectionChangedReset(IEnumerable? itemsSource)
         {
-            List<AdapterItem> items = itemsSource is null ? [] : new(itemsSource.Cast<object>().Select(d => new AdapterItem(d)));
+            List<object> items = itemsSource is null ? [] : new(itemsSource.Cast<object>());
 
             InternalItems = items;
 
@@ -134,7 +139,7 @@ namespace VirtualGridSample.VirtualControl
 
             var index = e.NewStartingIndex;
 
-            InternalItems.InsertRange(index, e.NewItems.Cast<object>().Select(d => new AdapterItem(d)));
+            InternalItems.InsertRange(index, e.NewItems.Cast<object>());
             NotifyItemRangeInserted(index, e.NewItems.Count);
         }
 
@@ -209,6 +214,84 @@ namespace VirtualGridSample.VirtualControl
             for (int i = 0; i < holders.Count; i++)
             {
                 holders[i].BindingContext = data;
+            }
+        }
+
+        internal void OnAdapterSet()
+        {
+            Control.Adapter.DataSetChanged += AdapterDataSetChanged;
+            //Control.Adapter.ItemMoved += AdapterItemMoved;
+            //Control.Adapter.ItemRangeChanged += AdapterItemRangeChanged;
+            //Control.Adapter.ItemRangeInserted += AdapterItemRangeInserted;
+            //Control.Adapter.ItemRangeRemoved += AdapterItemRangeRemoved;
+        }
+
+        private void AdapterDataSetChanged(object? sender, EventArgs e)
+        {
+            Control.ColumnDefinitions.Clear();
+            foreach (DataGridColumn column in Control.Columns)
+            {
+                Control.AddColumnDefinition(new ColumnDefinition()
+                {
+                    Width = column.Width,
+                });
+            }
+
+            if (InternalItems.Count > 0)
+            {
+                InvalidateLayout();
+            }
+        }
+        public void InvalidateLayout()
+        {
+            Control.RowDefinitions.Clear();
+
+            Control.AddRowDefinition(new RowDefinition()
+            {
+                Height = GridLength.Auto,
+            });
+            var headerTemplate = new DataTemplate(() =>
+            {
+                var label = new Label()
+                {
+                    HorizontalTextAlignment = TextAlignment.Center,
+                    FontAttributes = FontAttributes.Bold,
+                };
+                label.SetBinding(Label.TextProperty, new Binding("Title"));
+
+                return new StackLayout()
+                {
+                    BackgroundColor = Colors.Gray,
+                    Children =
+                    {
+                        label,
+                    }
+                };
+            });
+
+            for (int j = 0; j < Control.Columns.Count; j++)
+            {
+                var item = Control.Columns[j];
+                var view = headerTemplate.CreateContent() as Microsoft.Maui.Controls.View;
+                view.BindingContext = item;
+                Control.Add(view, j, 0);
+
+            }
+            for (int j = 0; j < InternalItems.Count; j ++)
+            {
+                Control.AddRowDefinition(new RowDefinition()
+                {
+                    Height = GridLength.Auto,
+                });
+                var item = InternalItems[j];
+                for (int i = 0; i < Control.Columns.Count; i++)
+                {
+                    var view = Control.Columns[i].ColumnCellTemplate.CreateContent() as Microsoft.Maui.Controls.View;
+                    view.BindingContext = item;
+                    Control.Add(view,i,j+1);
+                }
+
+
             }
         }
     }

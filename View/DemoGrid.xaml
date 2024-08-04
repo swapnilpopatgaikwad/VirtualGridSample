@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VirtualGridSample.View.DemoGrid"
+             Title="DemoGrid">
+    <Grid ColumnDefinitions="*"
+          RowDefinitions="Auto,Auto" >
+        <!-- Header ScrollView for horizontal scrolling -->
+        <ScrollView  Orientation="Horizontal"
+                    Grid.Row="0"
+                    x:Name="headerScrollView"
+                    HorizontalScrollBarVisibility="Never">
+            <Grid ColumnDefinitions="*,*,*,*,*,*"
+                  RowDefinitions="Auto">
+                <Label Text="Header 1"
+                       WidthRequest="100"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       Padding="5" />
+                <Label Text="Header 2"
+                       WidthRequest="100"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       Padding="5"
+                       Grid.Column="1" />
+                <Label Text="Header 3"
+                       WidthRequest="100"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       Padding="5"
+                       Grid.Column="2" />
+                <Label Text="Header 3"
+                       WidthRequest="100"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       Padding="5"
+                       Grid.Column="3" />
+                <Label Text="Header 4"
+                       WidthRequest="100"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       Padding="5"
+                       Grid.Column="4" />
+                <Label Text="Header 5"
+                       WidthRequest="100"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       Padding="5"
+                       Grid.Column="5" />
+            </Grid>
+        </ScrollView>
+
+        <!-- Scrollable content with vertical and horizontal scrolling -->
+        <ScrollView Grid.Row="1"
+                    Orientation="Both"
+                    x:Name="contentScrollView"
+                    Scrolled="OnContentScrolled">
+            <Grid ColumnDefinitions="100,100,100,100,100,100"
+                  RowDefinitions="Auto,Auto,Auto,Auto">
+                <!-- Add Rows dynamically here -->
+                <Label Text="Row 1, Col 1"
+                       Padding="5" />
+                <Label Text="Row 1, Col 2"
+                       Padding="5"
+                       Grid.Column="1" />
+                <Label Text="Row 1, Col 3"
+                       Padding="5"
+                       Grid.Column="2" />
+                <Label Text="Row 1, Col 2"
+                       Padding="5"
+                       Grid.Column="3" />
+                <Label Text="Row 1, Col 3"
+                       Padding="5"
+                       Grid.Column="4" />
+                <Label Text="Row 1, Col 3"
+                       Padding="5"
+                       Grid.Column="5" />
+                
+                
+
+                <Label Text="Row 2, Col 1"
+                       Padding="5"
+                       Grid.Row="1"
+                       Grid.Column="0" />
+                <Label Text="Row 2, Col 2"
+                       Padding="5"
+                       Grid.Row="1"
+                       Grid.Column="1" />
+                <Label Text="Row 2, Col 3"
+                       Padding="5"
+                       Grid.Row="1"
+                       Grid.Column="2" />
+
+                <Label Text="Row 2, Col 1"
+                       Padding="5"
+                       Grid.Row="1"
+                       Grid.Column="3" />
+                <Label Text="Row 2, Col 2"
+                       Padding="5"
+                       Grid.Row="1"
+                       Grid.Column="4" />
+                <Label Text="Row 2, Col 3"
+                       Padding="5"
+                       Grid.Row="1"
+                       Grid.Column="5" />
+
+                <Label Text="Row 3, Col 1"
+                       Padding="5"
+                       Grid.Row="2"
+                       Grid.Column="0" />
+                <Label Text="Row 3, Col 2"
+                       Padding="5"
+                       Grid.Row="2"
+                       Grid.Column="1" />
+                <Label Text="Row 3, Col 3"
+                       Padding="5"
+                       Grid.Row="2"
+                       Grid.Column="2" />
+
+                <Label Text="Row 3, Col 1"
+                       Padding="5"
+                       Grid.Row="2"
+                       Grid.Column="3" />
+                <Label Text="Row 3, Col 2"
+                       Padding="5"
+                       Grid.Row="2"
+                       Grid.Column="4" />
+                <Label Text="Row 3, Col 3"
+                       Padding="5"
+                       Grid.Row="2"
+                       Grid.Column="5" />
+
+                <!-- Add more rows as needed -->
+            </Grid>
+        </ScrollView>
+    </Grid>
+</ContentPage>

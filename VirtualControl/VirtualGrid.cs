@@ -1,49 +1,24 @@
 ﻿using System.Collections;
-using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using VirtualGridSample.Extension;
 
 namespace VirtualGridSample.VirtualControl
 {
-    public interface IItemsLayout
-    {
-        int PoolSize { get; set; }
-    }
-
-    public class ItemsLayout : IItemsLayout
-    {
-        public int PoolSize { get; set; } = 4;
-    }
-
-    public class LinearLayout : ItemsLayout
-    {
-        public double ItemSpacing { get; set; }
-    }
-    public class VirtualGrid : ScrollView
+    public class VirtualGrid : Grid
     {
         public PropertyInfo[] Properties { get; set; }
-        public ScrollOrientation PrevScrollOrientation { get; protected set; }
         public VirtualGrid()
         {
-            PrevScrollOrientation = Orientation != ScrollOrientation.Neither ? Orientation : ScrollOrientation.Vertical;
-            Orientation = ScrollOrientation.Both;
-            VerticalScrollBarVisibility = ScrollBarVisibility.Always;
-            HorizontalScrollBarVisibility = ScrollBarVisibility.Always;
             Adapter = new DataAdapter(this);
+            Render();
+        }
 
-            OnItemsLayoutSet();
-        }
-        protected virtual void OnItemsLayoutSet()
+        private void Render()
         {
-            if (ItemsLayout is LinearLayout linearLayout)
-            {
-                LayoutManager = new LinearItemsLayoutManager()
-                {
-                    BindingContext = null
-                };
-            }
+            Adapter?.OnAdapterSet();
         }
+
         public Type PropertyEnum
         {
             get { return (Type)GetValue(PropertyEnumProperty); }
@@ -89,11 +64,7 @@ namespace VirtualGridSample.VirtualControl
         BindableProperty.Create(
                 nameof(Columns),
                 typeof(ObservableRangeCollection<DataGridColumn>),
-                typeof(VirtualGrid), new ObservableRangeCollection<DataGridColumn>(), propertyChanged: ColumnsPropertyChanged);
-
-        private static void ColumnsPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-        }
+                typeof(VirtualGrid), new ObservableRangeCollection<DataGridColumn>());
 
         public DataAdapter Adapter
         {
@@ -106,30 +77,6 @@ namespace VirtualGridSample.VirtualControl
                 nameof(Adapter),
                 typeof(DataAdapter),
                 typeof(VirtualGrid));
-        public IItemsLayout ItemsLayout
-        {
-            get { return (IItemsLayout)GetValue(ItemsLayoutProperty); }
-            set { SetValue(ItemsLayoutProperty, value); }
-        }
-
-        public static readonly BindableProperty ItemsLayoutProperty =
-            BindableProperty.Create(
-                nameof(ItemsLayout),
-                typeof(IItemsLayout),
-                typeof(VirtualGrid),
-                new LinearLayout());
-
-        public VirtualizeItemsLayoutManger LayoutManager
-        {
-            get { return (VirtualizeItemsLayoutManger)GetValue(LayoutManagerProperty); }
-            protected set { SetValue(LayoutManagerProperty, value); }
-        }
-
-        public static readonly BindableProperty LayoutManagerProperty =
-            BindableProperty.Create(
-                nameof(LayoutManager),
-                typeof(VirtualizeItemsLayoutManger),
-                typeof(VirtualGrid));
 
 
         private static void OnGridItemSourceChanged(BindableObject bindable, object oldValue, object newValue)
@@ -141,23 +88,14 @@ namespace VirtualGridSample.VirtualControl
         protected override void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
-            if (propertyName == ColumnsProperty.PropertyName)
-            {
-                LayoutManager?.InvalidateLayout();
-            }
-            else if (propertyName == LayoutManagerProperty.PropertyName)
-            {
-                this.Content = LayoutManager;
-            }
-            else if (propertyName == GridItemSourceProperty.PropertyName)
+            if (propertyName == GridItemSourceProperty.PropertyName)
             {
                 Adapter?.ReloadData();
             }
-        }
-
-        protected override void OnPropertyChanging([CallerMemberName] string propertyName = null)
-        {
-            base.OnPropertyChanging(propertyName);
+            else if (propertyName == ColumnProperty.PropertyName)
+            {
+                Adapter?.BuildColumns();
+            }
         }
 
         public void HandleGridItemSourceChanged()

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace VirtualGridSample.VirtualControl
+﻿namespace VirtualGridSample.VirtualControl
 {
     public class CellHolder : Grid
     {
@@ -19,7 +13,6 @@ namespace VirtualGridSample.VirtualControl
 
         private void CellHolder_SizeChanged(object? sender, EventArgs e)
         {
-            //Item?.OnCellSizeChanged();
         }
     }
 }

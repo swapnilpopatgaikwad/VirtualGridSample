@@ -12,8 +12,8 @@
                 HorizontalScrollBarVisibility="Always"
                 VerticalScrollBarVisibility="Always">
         <view:VirtualGrid PropertyEnum="{x:Type model:PTypePropertyType}"
-                          GridItemSource="{Binding DataItems}"
-                          Columns="{Binding Columns}">
+                          Columns="{Binding Columns}"
+                          GridItemSource="{Binding DataItems}">
 
         </view:VirtualGrid>
         
